@@ -8,26 +8,34 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojis = ["✈️", "🚛", "🚜", "🚃", "🚒", "🚗", "🚕", "🚙", "🚌", "🚎"]
+    @State var emojis = ["✈️", "🚛", "🚜", "🚃", "🚒", "🚗", "🚕", "🚙", "🚌", "🚎"]
     @State var emojiCount = 5
     
     var body: some View {
-         VStack {
-             ScrollView {
-                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], content: {
-                     ForEach(emojis[0...emojiCount], id: \.self, content: { emoji in
-                         CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)              
-                     }).foregroundColor(.red)                
-                 })
-             }
-             Spacer()
-             HStack {
-                 add
-                 Spacer()
-                 remove
-             }.font(.largeTitle)             
+        NavigationStack {
+            VStack {
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))], content: {
+                        ForEach(emojis, id: \.self, content: { emoji in
+                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)              
+                        }).foregroundColor(.red)                
+                    })
+                }
+                Spacer()
+                 HStack {
+//                     add
+//                     Spacer()
+//                     remove
+                     fruitTheme
+                     Spacer()
+                     transportTheme
+                     Spacer()
+                     animalTheme
+                 }.font(.largeTitle)             
+            }
+            .padding()
+            .navigationTitle("Memorize")
         }
-        .padding()
     }
     
     var add: some View {
@@ -50,6 +58,41 @@ struct ContentView: View {
         })
     }
     
+    var fruitTheme: some View {
+        Button(action: {
+            emojis = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓"].shuffled()
+        }, label: {
+            VStack {
+                Image(systemName: "leaf")
+                Text("Fruit")
+                    .font(.body)
+            }
+        })
+    }
+    
+    var transportTheme: some View {
+        Button(action: {
+            emojis = ["✈️", "🚛", "🚜", "🚃", "🚒", "🚗", "🚕", "🚙"].shuffled()
+        }, label: {
+            VStack {
+                Image(systemName: "car.circle")
+                Text("Vehicles")
+                    .font(.body)
+            }
+        })
+    }
+    
+    var animalTheme: some View {
+        Button(action: {
+            emojis = ["🐶", "🐱", "🦊", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷"].shuffled()
+        }, label: {
+            VStack {
+                Image(systemName: "pawprint.circle")
+                Text("Animals")
+                    .font(.body)
+            }
+        })
+    }
 }
 
 struct CardView: View {

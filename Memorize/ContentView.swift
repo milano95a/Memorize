@@ -1,31 +1,27 @@
-//
-//  ContentView.swift
-//  Memorize
-//
-//  Created by Workspace on 16/02/23.
-//
 
 import SwiftUI
 
 struct ContentView: View {
-    @State var emojis = ["✈️", "🚛", "🚜", "🚃", "🚒", "🚗", "🚕", "🚙", "🚌", "🚎"]
-    @State var emojiCount = 5
+    @State var emojis = ["✈️", "🚛", "🚜", "🚃", "🚒", "🚗", "🚕", "🚙", "🚌", "🚎"] {
+        didSet {
+            let randomInt = Int.random(in: 4..<emojis.count)
+            emojiCount = randomInt
+        }
+    }
+    @State var emojiCount = 4
     
     var body: some View {
         NavigationStack {
             VStack {
                 ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))], content: {
-                        ForEach(emojis, id: \.self, content: { emoji in
-                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)              
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: widthThatBestFits()))], content: {
+                        ForEach(0..<emojiCount, id: \.self, content: { index in
+                            CardView(content: emojis[index]).aspectRatio(2/3, contentMode: .fit)
                         }).foregroundColor(.red)                
                     })
                 }
                 Spacer()
                  HStack {
-//                     add
-//                     Spacer()
-//                     remove
                      fruitTheme
                      Spacer()
                      transportTheme
@@ -36,26 +32,6 @@ struct ContentView: View {
             .padding()
             .navigationTitle("Memorize")
         }
-    }
-    
-    var add: some View {
-        Button(action: {
-            if emojiCount < emojis.count-1 {
-                emojiCount += 1                
-            }
-        }, label: {
-            Image(systemName: "plus.circle")
-        })
-    }
-    
-    var remove: some View {
-        Button(action: {
-            if emojiCount > 0 {
-                emojiCount -= 1
-            }
-        }, label: {
-            Image(systemName: "minus.circle")
-        })
     }
     
     var fruitTheme: some View {
@@ -92,6 +68,10 @@ struct ContentView: View {
                     .font(.body)
             }
         })
+    }    
+    
+    func widthThatBestFits() -> CGFloat {
+        return 500/CGFloat(emojiCount)
     }
 }
 
